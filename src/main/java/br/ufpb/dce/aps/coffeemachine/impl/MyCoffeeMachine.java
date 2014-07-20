@@ -24,6 +24,12 @@ public class MyCoffeeMachine implements CoffeeMachine{
 		
 		
 	}
+
+	public void cancel() {
+		if (this.total == 0) {
+			throw new CoffeeMachineException(" Cancel without inserting coins");
+		}
+	}
 	
 	
 	
