@@ -13,7 +13,6 @@ public class MyCoffeeMachine implements CoffeeMachine{
 	protected ComponentsFactory fac;
 	protected ArrayList<Coin> coins = new ArrayList<Coin>();
 	protected Coin[] aux = new Coin[2];
-	protected Drink drinkSelect;
 	
 	public MyCoffeeMachine(ComponentsFactory factory) {
 		fac = factory;
@@ -59,7 +58,7 @@ public class MyCoffeeMachine implements CoffeeMachine{
 
 	public void select(Drink drink) {
 		// TODO Auto-generated method stub
-		if(drinkSelect.BLACK == drink){
+		if(Drink.BLACK == drink){
 			fac.getCupDispenser().contains(1);
 			fac.getWaterDispenser().contains(3.0);
 			fac.getCoffeePowderDispenser().contains(3.0);
@@ -71,6 +70,24 @@ public class MyCoffeeMachine implements CoffeeMachine{
 			fac.getDrinkDispenser().release(3.0);
 			fac.getDisplay().info("Please, take your drink.");
 			fac.getDisplay().info("Insert coins and select a drink!");
+			
+		}else if(Drink.BLACK_SUGAR == drink){
+			fac.getCupDispenser().contains(1);
+			fac.getWaterDispenser().contains(3.0);
+			fac.getCoffeePowderDispenser().contains(3.0);
+			fac.getSugarDispenser().contains(1.0);
+			
+			fac.getDisplay().info("Mixing ingredients.");
+			fac.getCoffeePowderDispenser().release(3.0);
+			fac.getWaterDispenser().release(3.0);
+			fac.getSugarDispenser().release(2.0);
+			
+			fac.getDisplay().info("Releasing drink.");
+			fac.getCupDispenser().release(1);
+			fac.getDrinkDispenser().release(3.0);
+			fac.getDisplay().info("Please, take your drink.");
+			fac.getDisplay().info("Insert coins and select a drink!");
 		}
+		
 	}
 }
