@@ -6,12 +6,14 @@ import br.ufpb.dce.aps.coffeemachine.CoffeeMachine;
 import br.ufpb.dce.aps.coffeemachine.CoffeeMachineException;
 import br.ufpb.dce.aps.coffeemachine.Coin;
 import br.ufpb.dce.aps.coffeemachine.ComponentsFactory;
+import br.ufpb.dce.aps.coffeemachine.Drink;
 
 public class MyCoffeeMachine implements CoffeeMachine{
 	protected int total ; 
 	protected ComponentsFactory fac;
 	protected ArrayList<Coin> coins = new ArrayList<Coin>();
 	protected Coin[] aux = new Coin[2];
+	protected Drink drinkSelect;
 	
 	public MyCoffeeMachine(ComponentsFactory factory) {
 		fac = factory;
@@ -50,9 +52,25 @@ public class MyCoffeeMachine implements CoffeeMachine{
 		
 		
 	}
-	
-	
-	
-	
-	
+//	
+//	verifyBlackPlan(inOrder);
+//	verifyBlackMix(inOrder);
+//	verifyDrinkRelease(inOrder);
+
+	public void select(Drink drink) {
+		// TODO Auto-generated method stub
+		if(drinkSelect.BLACK == drink){
+			fac.getCupDispenser().contains(1);
+			fac.getWaterDispenser().contains(3.0);
+			fac.getCoffeePowderDispenser().contains(3.0);
+			fac.getDisplay().info("Mixing ingredients.");
+			fac.getCoffeePowderDispenser().release(3.0);
+			fac.getWaterDispenser().release(3.0);
+			fac.getDisplay().info("Releasing drink.");
+			fac.getCupDispenser().release(1);
+			fac.getDrinkDispenser().release(3.0);
+			fac.getDisplay().info("Please, take your drink.");
+			fac.getDisplay().info("Insert coins and select a drink!");
+		}
+	}
 }
