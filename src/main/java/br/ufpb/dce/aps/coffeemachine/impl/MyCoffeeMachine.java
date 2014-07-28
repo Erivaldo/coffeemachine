@@ -7,6 +7,7 @@ import br.ufpb.dce.aps.coffeemachine.CoffeeMachineException;
 import br.ufpb.dce.aps.coffeemachine.Coin;
 import br.ufpb.dce.aps.coffeemachine.ComponentsFactory;
 import br.ufpb.dce.aps.coffeemachine.Drink;
+import br.ufpb.dce.aps.coffeemachine.Messages;
 
 public class MyCoffeeMachine implements CoffeeMachine{
 	protected int total ; 
@@ -32,9 +33,9 @@ public class MyCoffeeMachine implements CoffeeMachine{
 	public void cancel() {
 		if (this.total == 0) {
 			throw new CoffeeMachineException(" Cancel without inserting coins");
-		}else if (coins.size() >= 2) {
+		}else if (coins.size() >= 1) {
 			Coin[] reverso = Coin.reverse();
-			fac.getDisplay().warn("Cancelling drink. Please, get your coins.");
+			fac.getDisplay().warn(Messages.CANCEL);
 			for (Coin r : reverso) {
 				for (Coin aux : this.coins) {
 					if (aux == r) {
@@ -43,13 +44,10 @@ public class MyCoffeeMachine implements CoffeeMachine{
 				}
 			}
 			fac.getDisplay().info("Insert coins and select a drink!");
-		}
-		fac.getDisplay().warn("Cancelling drink. Please, get your coins.");
-		fac.getCashBox().release(Coin.halfDollar);
-		fac.getDisplay().info("Insert coins and select a drink!");
+			
+		
 
-		
-		
+		}
 	}
 //	
 //	verifyBlackPlan(inOrder);
@@ -62,16 +60,20 @@ public class MyCoffeeMachine implements CoffeeMachine{
 			fac.getCupDispenser().contains(1);
 			fac.getWaterDispenser().contains(3.0);
 			fac.getCoffeePowderDispenser().contains(3.0);
+			
 			fac.getDisplay().info("Mixing ingredients.");
 			fac.getCoffeePowderDispenser().release(3.0);
 			fac.getWaterDispenser().release(3.0);
 			fac.getDisplay().info("Releasing drink.");
+			
 			fac.getCupDispenser().release(1);
 			fac.getDrinkDispenser().release(3.0);
 			fac.getDisplay().info("Please, take your drink.");
 			fac.getDisplay().info("Insert coins and select a drink!");
 			
-		}else if(Drink.BLACK_SUGAR == drink){
+		}
+		else if(Drink.BLACK_SUGAR == drink){
+			
 			fac.getCupDispenser().contains(1);
 			fac.getWaterDispenser().contains(3.0);
 			fac.getCoffeePowderDispenser().contains(3.0);
@@ -81,8 +83,8 @@ public class MyCoffeeMachine implements CoffeeMachine{
 			fac.getCoffeePowderDispenser().release(3.0);
 			fac.getWaterDispenser().release(3.0);
 			fac.getSugarDispenser().release(2.0);
-			
 			fac.getDisplay().info("Releasing drink.");
+			
 			fac.getCupDispenser().release(1);
 			fac.getDrinkDispenser().release(3.0);
 			fac.getDisplay().info("Please, take your drink.");
