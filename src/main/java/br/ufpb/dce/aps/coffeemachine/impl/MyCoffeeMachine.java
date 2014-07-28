@@ -79,6 +79,7 @@ public class MyCoffeeMachine implements CoffeeMachine{
 			fac.getCoffeePowderDispenser().contains(3.0);
 			fac.getSugarDispenser().contains(1.0);
 			
+	
 			fac.getDisplay().info("Mixing ingredients.");
 			fac.getCoffeePowderDispenser().release(3.0);
 			fac.getWaterDispenser().release(3.0);
@@ -89,7 +90,10 @@ public class MyCoffeeMachine implements CoffeeMachine{
 			fac.getDrinkDispenser().release(3.0);
 			fac.getDisplay().info("Please, take your drink.");
 			fac.getDisplay().info("Insert coins and select a drink!");
-		}
 		
+			
+			this.coins.clear();
+			
+			}
+		}
 	}
-}
