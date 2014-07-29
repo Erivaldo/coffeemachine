@@ -138,8 +138,29 @@ public class MyCoffeeMachine implements CoffeeMachine{
 			fac.getDisplay().info(Messages.TAKE_DRINK);
 			
 			fac.getDisplay().info(Messages.INSERT_COINS);
+		}
+		else if (Drink.WHITE_SUGAR == drink) {
+			fac.getCupDispenser().contains(1);
+			fac.getWaterDispenser().contains(3.0);
+			fac.getCoffeePowderDispenser().contains(3.0);
+			fac.getCreamerDispenser().contains(3.0);
+			fac.getSugarDispenser().contains(3.0);
+
+			//Criar o método para retornar as moedas "DIME" e "NICKEL" nesta ordem
 			
+			fac.getDisplay().info(Messages.MIXING);
+			fac.getCoffeePowderDispenser().release(3.0);
+			fac.getWaterDispenser().release(3.0);
+			fac.getCreamerDispenser().release(3.0);
+			fac.getSugarDispenser().release(3.0);
 			
+			fac.getDisplay().info(Messages.RELEASING);
+			fac.getCupDispenser().release(1);
+			fac.getDrinkDispenser().release(3.0);
+			fac.getDisplay().info(Messages.TAKE_DRINK);
+			
+			//Criar método verifyReleaseCoins
+			fac.getDisplay().info(Messages.INSERT_COINS);
 		}
 	}
 }
