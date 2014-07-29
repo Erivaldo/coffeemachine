@@ -83,7 +83,12 @@ public class MyCoffeeMachine implements CoffeeMachine{
 			fac.getCupDispenser().contains(1);
 			fac.getWaterDispenser().contains(3.0);
 			fac.getCoffeePowderDispenser().contains(3.0);
-			fac.getSugarDispenser().contains(1.0);
+			if(!(fac.getSugarDispenser().contains(1.0))){
+				fac.getDisplay().warn(Messages.OUT_OF_SUGAR);
+				removerMoeda();
+				fac.getDisplay().info("Insert coins and select a drink!");
+				return;
+			}
 				
 		
 			fac.getDisplay().info("Mixing ingredients.");
