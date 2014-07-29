@@ -301,7 +301,7 @@ public abstract class CoffeeMachineTest {
 		verifyOutOfIngredient(inOrder, Messages.OUT_OF_COFFEE_POWDER,
 				Coin.quarter, Coin.dime);
 	}
-
+	
 	private void verifyOutOfIngredient(InOrder inOrder, String message,
 			Coin... coins) {
 		inOrder.verify(display).warn(message);
