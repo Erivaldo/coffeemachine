@@ -57,7 +57,12 @@ public class MyCoffeeMachine implements CoffeeMachine{
 
 	public void select(Drink drink) {
 		if(Drink.BLACK == drink){
-			fac.getCupDispenser().contains(1);
+			if(!(fac.getCupDispenser().contains(1))){
+				fac.getDisplay().warn(Messages.OUT_OF_CUP);
+				removerMoeda();
+				fac.getDisplay().info("Insert coins and select a drink!");
+				return;
+			}
 			if(!(fac.getWaterDispenser().contains(3.0))){
 				fac.getDisplay().warn(Messages.OUT_OF_WATER);
 				removerMoeda();
@@ -85,7 +90,12 @@ public class MyCoffeeMachine implements CoffeeMachine{
 		}
 		else if(Drink.BLACK_SUGAR == drink){
 				
-			fac.getCupDispenser().contains(1);
+			if(!(fac.getCupDispenser().contains(1))){
+				fac.getDisplay().warn(Messages.OUT_OF_CUP);
+				removerMoeda();
+				fac.getDisplay().info("Insert coins and select a drink!");
+				return;
+			}
 			fac.getWaterDispenser().contains(3.0);
 			fac.getCoffeePowderDispenser().contains(3.0);
 			if(!(fac.getSugarDispenser().contains(1.0))){
