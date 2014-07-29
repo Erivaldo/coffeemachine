@@ -58,7 +58,12 @@ public class MyCoffeeMachine implements CoffeeMachine{
 	public void select(Drink drink) {
 		if(Drink.BLACK == drink){
 			fac.getCupDispenser().contains(1);
-			fac.getWaterDispenser().contains(3.0);
+			if(!(fac.getWaterDispenser().contains(3.0))){
+				fac.getDisplay().warn(Messages.OUT_OF_WATER);
+				removerMoeda();
+				fac.getDisplay().info("Insert coins and select a drink!");
+				return;
+			}
 			if(!(fac.getCoffeePowderDispenser().contains(3.0))){
 				fac.getDisplay().warn(Messages.OUT_OF_COFFEE_POWDER);
 				removerMoeda();
