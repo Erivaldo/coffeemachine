@@ -1,7 +1,9 @@
 package br.ufpb.dce.aps.coffeemachine.impl;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import br.ufpb.dce.aps.coffeemachine.CashBox;
 import br.ufpb.dce.aps.coffeemachine.CoffeeMachine;
 import br.ufpb.dce.aps.coffeemachine.CoffeeMachineException;
 import br.ufpb.dce.aps.coffeemachine.Coin;
@@ -54,7 +56,23 @@ public class MyCoffeeMachine implements CoffeeMachine{
 			}
 		}
 	}
-
+	
+	public List<Coin> retornarTroco(int change){
+		List<Coin> retorno = new ArrayList<Coin>();
+		for (Coin c : Coin.reverse()) {
+			while(c.getValue() < change){
+				fac.getCashBox().count(c);
+				retorno.add(c);
+				change = change - c.getValue();
+			}
+		}
+		return retorno;
+	}
+	
+	
+	
+	
+	
 	public void select(Drink drink) {
 		if(Drink.BLACK == drink){
 			if(!(fac.getCupDispenser().contains(1))){
@@ -147,6 +165,7 @@ public class MyCoffeeMachine implements CoffeeMachine{
 			fac.getSugarDispenser().contains(3.0);
 
 			//Criar o método para retornar as moedas "DIME" e "NICKEL" nesta ordem
+			List<Coin> retur = retornarTroco(Coin.halfDollar.getValue());
 			
 			fac.getDisplay().info(Messages.MIXING);
 			fac.getCoffeePowderDispenser().release(3.0);
