@@ -45,7 +45,7 @@ public class MyCoffeeMachine implements CoffeeMachine{
 		
 	}
 	
-	public void removerMoeda(){
+	private void removerMoeda(){
 		Coin[] reverso = Coin.reverse();
 		
 		for (Coin r : reverso) {
@@ -57,7 +57,7 @@ public class MyCoffeeMachine implements CoffeeMachine{
 		}
 	}
 	
-	public List<Coin> retornarTroco(int troco) {
+	private List<Coin> retornarTroco(int troco) {
 		for (Coin coin : Coin.reverse()) {
 			while (coin.getValue() <= troco) {
 				fac.getCashBox().release(coin);
@@ -68,7 +68,7 @@ public class MyCoffeeMachine implements CoffeeMachine{
 		return coins;
 	}
 	
-	public void planejamento(int troco) {
+	private void planejamento(int troco) {
 		for (Coin coin : Coin.reverse()) {
 			if (coin.getValue() <= troco) {
 				fac.getCashBox().count(coin);
@@ -77,7 +77,7 @@ public class MyCoffeeMachine implements CoffeeMachine{
 		}
 	}
 	
-	public int calculaTroco() {
+	private int calculaTroco() {
 		int contador = 0;
 		for (Coin c : this.coins) {
 			contador = +c.getValue();
@@ -88,7 +88,19 @@ public class MyCoffeeMachine implements CoffeeMachine{
 	
 	
 	public void select(Drink drink) {
-		if(Drink.BLACK == drink){
+		switch (drink) {
+		case BLACK:
+			
+			break;
+
+		default:
+			break;
+		}
+		
+		
+		
+		
+		/*if(Drink.BLACK == drink){
 			if(!(fac.getCupDispenser().contains(1))){
 				fac.getDisplay().warn(Messages.OUT_OF_CUP);
 				removerMoeda();
@@ -195,5 +207,6 @@ public class MyCoffeeMachine implements CoffeeMachine{
 			
 			fac.getDisplay().info(Messages.INSERT_COINS);
 		}
-	}
+	}*/
+	
 }
