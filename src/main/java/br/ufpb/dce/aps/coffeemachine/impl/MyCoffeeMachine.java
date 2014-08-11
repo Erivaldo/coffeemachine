@@ -3,7 +3,6 @@ package br.ufpb.dce.aps.coffeemachine.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.ufpb.dce.aps.coffeemachine.CashBox;
 import br.ufpb.dce.aps.coffeemachine.CoffeeMachine;
 import br.ufpb.dce.aps.coffeemachine.CoffeeMachineException;
 import br.ufpb.dce.aps.coffeemachine.Coin;
@@ -16,6 +15,7 @@ public class MyCoffeeMachine implements CoffeeMachine{
 	protected ComponentsFactory fac;
 	protected ArrayList<Coin> coins = new ArrayList<Coin>();
 	protected Coin[] aux = new Coin[2];
+	protected final int cafe = 35;
 	
 	public MyCoffeeMachine(ComponentsFactory factory) {
 		fac = factory;
@@ -57,20 +57,34 @@ public class MyCoffeeMachine implements CoffeeMachine{
 		}
 	}
 	
-	public List<Coin> retornarTroco(int change){
-		List<Coin> retorno = new ArrayList<Coin>();
-		for (Coin c : Coin.reverse()) {
-			while(c.getValue() < change){
-				fac.getCashBox().count(c);
-				retorno.add(c);
-				change = change - c.getValue();
+	public List<Coin> retornarTroco(int troco) {
+		for (Coin coin : Coin.reverse()) {
+			while (coin.getValue() <= troco) {
+				fac.getCashBox().release(coin);
+				this.coins.add(coin);
+				troco = troco - coin.getValue();
 			}
 		}
-		return retorno;
+		return coins;
 	}
 	
+	public void planejamento(int troco) {
+		for (Coin coin : Coin.reverse()) {
+			if (coin.getValue() <= troco) {
+				fac.getCashBox().count(coin);
+				troco = troco - coin.getValue();
+			}
+		}
+	}
 	
-	
+	public int calculaTroco() {
+		int contador = 0;
+		for (Coin c : this.coins) {
+			contador = +c.getValue();
+		}
+		return contador - this.cafe;
+
+	}
 	
 	
 	public void select(Drink drink) {
@@ -164,8 +178,7 @@ public class MyCoffeeMachine implements CoffeeMachine{
 			fac.getCreamerDispenser().contains(3.0);
 			fac.getSugarDispenser().contains(3.0);
 
-			//Criar o método para retornar as moedas "DIME" e "NICKEL" nesta ordem
-			List<Coin> retur = retornarTroco(Coin.halfDollar.getValue());
+			planejamento(calculaTroco());	
 			
 			fac.getDisplay().info(Messages.MIXING);
 			fac.getCoffeePowderDispenser().release(3.0);
@@ -178,7 +191,8 @@ public class MyCoffeeMachine implements CoffeeMachine{
 			fac.getDrinkDispenser().release(3.0);
 			fac.getDisplay().info(Messages.TAKE_DRINK);
 			
-			//Criar método verifyReleaseCoins
+			retornarTroco(calculaTroco());
+			
 			fac.getDisplay().info(Messages.INSERT_COINS);
 		}
 	}
