@@ -17,6 +17,9 @@ public class MyCoffeeMachine implements CoffeeMachine{
 	protected Coin[] aux = new Coin[2];
 	protected final int cafe = 35;
 	
+	
+	public MyCoffeeMachine() {
+	}
 	public MyCoffeeMachine(ComponentsFactory factory) {
 		fac = factory;
 		fac.getDisplay().info("Insert coins and select a drink!");
@@ -45,7 +48,7 @@ public class MyCoffeeMachine implements CoffeeMachine{
 		
 	}
 	
-	private void removerMoeda(){
+	public void removerMoeda(){
 		Coin[] reverso = Coin.reverse();
 		
 		for (Coin r : reverso) {
@@ -57,7 +60,7 @@ public class MyCoffeeMachine implements CoffeeMachine{
 		}
 	}
 	
-	private List<Coin> retornarTroco(int troco) {
+	public List<Coin> retornarTroco(int troco) {
 		for (Coin coin : Coin.reverse()) {
 			while (coin.getValue() <= troco) {
 				fac.getCashBox().release(coin);
@@ -68,7 +71,7 @@ public class MyCoffeeMachine implements CoffeeMachine{
 		return coins;
 	}
 	
-	private void planejamento(int troco) {
+	public void planejamento(int troco) {
 		for (Coin coin : Coin.reverse()) {
 			if (coin.getValue() <= troco) {
 				fac.getCashBox().count(coin);
@@ -77,7 +80,7 @@ public class MyCoffeeMachine implements CoffeeMachine{
 		}
 	}
 	
-	private int calculaTroco() {
+	public int calculaTroco() {
 		int contador = 0;
 		for (Coin c : this.coins) {
 			contador = +c.getValue();
@@ -88,16 +91,29 @@ public class MyCoffeeMachine implements CoffeeMachine{
 	
 	
 	public void select(Drink drink) {
+		Bebida bebida = null;
+		
 		switch (drink) {
 		case BLACK:
+			bebida = new Black();
+			bebida.chamaDrink();
+			break;
+		case BLACK_SUGAR:
+			bebida = new Black_Sugar();
+			bebida.chamaDrink();
+			break;
+		case WHITE:
+			bebida = new White();
+			bebida.chamaDrink();
+			break;
+		case WHITE_SUGAR:
+			bebida = new White_Sugar();
+			bebida.chamaDrink();
+			break;
+		default:
 			
 			break;
-
-		default:
-			break;
 		}
-		
-		
 		
 		
 		/*if(Drink.BLACK == drink){
@@ -208,5 +224,5 @@ public class MyCoffeeMachine implements CoffeeMachine{
 			fac.getDisplay().info(Messages.INSERT_COINS);
 		}
 	}*/
-	
+	}	
 }

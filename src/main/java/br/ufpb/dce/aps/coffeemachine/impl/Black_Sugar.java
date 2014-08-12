@@ -1,15 +1,21 @@
 package br.ufpb.dce.aps.coffeemachine.impl;
 
+import br.ufpb.dce.aps.coffeemachine.ComponentsFactory;
+import br.ufpb.dce.aps.coffeemachine.Drink;
 import br.ufpb.dce.aps.coffeemachine.Messages;
 
 
-public class Black_Sugar extends Drink{
-
+public class Black_Sugar extends Bebida{
+	
+	public ComponentsFactory fac;
+	public MyCoffeeMachine coffe = new MyCoffeeMachine();
+	
 	@Override
 	public void chamaDrink() {
+		
 		if(!(fac.getCupDispenser().contains(1))){
 			fac.getDisplay().warn(Messages.OUT_OF_CUP);
-			removerMoeda();
+			coffe.removerMoeda();
 			fac.getDisplay().info("Insert coins and select a drink!");
 			return;
 		}
@@ -17,7 +23,7 @@ public class Black_Sugar extends Drink{
 		fac.getCoffeePowderDispenser().contains(3.0);
 		if(!(fac.getSugarDispenser().contains(1.0))){
 			fac.getDisplay().warn(Messages.OUT_OF_SUGAR);
-			removerMoeda();
+			coffe.removerMoeda();
 			fac.getDisplay().info("Insert coins and select a drink!");
 			return;
 		}
@@ -35,7 +41,7 @@ public class Black_Sugar extends Drink{
 		fac.getDisplay().info("Insert coins and select a drink!");
 		
 			
-		this.coins.clear();
+		coffe.coins.clear();
 	}
 
 }
