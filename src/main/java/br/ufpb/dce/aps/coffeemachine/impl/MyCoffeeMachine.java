@@ -12,12 +12,15 @@ import br.ufpb.dce.aps.coffeemachine.Messages;
 public class MyCoffeeMachine implements CoffeeMachine{
 	protected int total ; 
 	protected ComponentsFactory fac;
-	protected ArrayList<Coin> coins = new ArrayList<Coin>();
+	protected ArrayList<Coin> coins, listaTroco;
 	protected Coin[] aux = new Coin[2];
+	protected int cafe = 35;
 	
 	public MyCoffeeMachine(ComponentsFactory factory) {
 		fac = factory;
 		fac.getDisplay().info("Insert coins and select a drink!");
+		coins = new ArrayList<Coin>();
+		listaTroco = new ArrayList<Coin>();
 	}
 
 	public void insertCoin(Coin coin) {
@@ -53,6 +56,37 @@ public class MyCoffeeMachine implements CoffeeMachine{
 				}
 			}
 		}
+	}
+	
+	public int calculaTroco() {
+		int contador = 0;
+		for (Coin c : this.coins) {
+			contador += c.getValue();
+		}
+		return (contador - this.cafe);
+
+	}
+	
+	public boolean planejamento(int troco) {
+		for (Coin coin : Coin.reverse()) {
+			if (coin.getValue() <= troco && this.fac.getCashBox().count(coin) > 0) {
+				
+				troco -= coin.getValue();
+			}
+
+		}
+		return troco == 0;
+	}
+	
+	public ArrayList<Coin> retornarTroco(int troco) {
+		for (Coin coin : Coin.reverse()) {
+			while (coin.getValue() <= troco) {
+				fac.getCashBox().release(coin);
+				this.listaTroco.add(coin);
+				troco -= coin.getValue();
+			}
+		}
+		return listaTroco;
 	}
 
 	public void select(Drink drink) {
@@ -146,7 +180,7 @@ public class MyCoffeeMachine implements CoffeeMachine{
 			fac.getCreamerDispenser().contains(3.0);
 			fac.getSugarDispenser().contains(3.0);
 
-			//Criar o método para retornar as moedas "DIME" e "NICKEL" nesta ordem
+			planejamento(calculaTroco());
 			
 			fac.getDisplay().info(Messages.MIXING);
 			fac.getCoffeePowderDispenser().release(3.0);
@@ -159,7 +193,8 @@ public class MyCoffeeMachine implements CoffeeMachine{
 			fac.getDrinkDispenser().release(3.0);
 			fac.getDisplay().info(Messages.TAKE_DRINK);
 			
-			//Criar método verifyReleaseCoins
+			retornarTroco(calculaTroco());
+			
 			fac.getDisplay().info(Messages.INSERT_COINS);
 		}
 	}
