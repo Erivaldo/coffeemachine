@@ -106,10 +106,29 @@ public class MyCoffeeMachine implements CoffeeMachine{
 		return contador - this.cafe;
 
 	}
+	public int [] semTrocoTrivial (int dinheiro) {
+			int [] changePlan = new int[6];
+				int i=0;
+				for (Coin r : Coin.reverse()) {
+					if (r.getValue() <= dinheiro && cb.count(r) > 0) {
+						while (r .getValue() <= dinheiro) {
+							dinheiro -= r.getValue();
+							changePlan[i]++;
+						}
+					}
+				}		
+				
+				return changePlan;
+			}
 	
 	public void select(Drink drink) {
 
 		if(Drink.BLACK == drink){
+			
+			if (semTrocoTrivial(calcularTroco())) {
+				retornarTroco(calcularTroco());
+								return;}				}
+			
 			if (calculaTroco() < 0) {
 				Factory.getDisplay().warn(Messages.NO_ENOUGHT_MONEY);
 				this.retirarmoedas(Factory);
