@@ -137,12 +137,12 @@ public class MyCoffeeMachine implements CoffeeMachine{
 				this.Factory.getDisplay().info(Messages.INSERT_COINS);
 				return;
 			}
-			/*if (!planejamento(calculaTroco())){
+			if (!planejamento(calculaTroco())){
 				Factory.getDisplay().warn(Messages.NO_ENOUGHT_CHANGE);
 				this.retirarmoedas(Factory);
 				this.Factory.getDisplay().info(Messages.INSERT_COINS);
 				return;
-			}*/
+			}
 
 			
 			Factory.getDisplay().info(Messages.MIXING);
@@ -193,12 +193,12 @@ public class MyCoffeeMachine implements CoffeeMachine{
 				return;
 
 			}
-			/*if (!planejamento(calculaTroco())){
+			if (!planejamento(calculaTroco())){
 				Factory.getDisplay().warn(Messages.NO_ENOUGHT_CHANGE);
 				this.retirarmoedas(Factory);
 				this.Factory.getDisplay().info(Messages.INSERT_COINS);
 				return;
-			}*/
+			}
 
 			Factory.getDisplay().info(Messages.MIXING);
 			Factory.getCoffeePowderDispenser().release(1.9);
@@ -231,12 +231,12 @@ public class MyCoffeeMachine implements CoffeeMachine{
 			Factory.getCoffeePowderDispenser().contains(1);
 			Factory.getCreamerDispenser().contains(1.2);
 			
-			/*if (!planejamento(calculaTroco())){
+			if (!planejamento(calculaTroco())){
 				Factory.getDisplay().warn(Messages.NO_ENOUGHT_CHANGE);
 				this.retirarmoedas(Factory);
 				this.Factory.getDisplay().info(Messages.INSERT_COINS);
 				return;
-			}*/
+			}
 			
 			Factory.getDisplay().info(Messages.MIXING);
 			Factory.getCoffeePowderDispenser().release(1.9);
@@ -256,11 +256,11 @@ public class MyCoffeeMachine implements CoffeeMachine{
 
 		else if (Drink.WHITE_SUGAR == drink) {
 			
-			/*if (calculaTroco() < 0) {
+			if (calculaTroco() < 0) {
 				Factory.getDisplay().warn(Messages.NO_ENOUGHT_CHANGE);
 				this.retirarmoedas(Factory);
 				return;
-			}*/
+			}
 			
 			Factory.getCupDispenser().contains(1);
 			Factory.getWaterDispenser().contains(1);
