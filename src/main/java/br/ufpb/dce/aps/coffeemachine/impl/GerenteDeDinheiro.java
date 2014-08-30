@@ -14,8 +14,7 @@ public class GerenteDeDinheiro {
 	private Display myDisplay;
 	private ArrayList<Coin> moedas;
 	private int centavos, dolares;
-	private final int COFFEEPRICE = 35;
-	
+	private int COFFEEPRICE;
 	public GerenteDeDinheiro(ComponentsFactory factory){
 	cashBox = factory.getCashBox();
 	myDisplay = factory.getDisplay();
@@ -67,5 +66,7 @@ public class GerenteDeDinheiro {
 	public int count(Coin coin) {
 	return cashBox.count(coin);
 	}
-
+	public void setCoffeePrice(int coffeePrice){
+	this.COFFEEPRICE = coffeePrice;
+	}
 }

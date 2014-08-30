@@ -18,11 +18,14 @@ public class MyCoffeeMachine implements CoffeeMachine{
 	private MyDisplay myDisplay;
 	private GerenteDeDinheiro myCashBox;
 	
+	
 	public MyCoffeeMachine(ComponentsFactory factory) {
 	this.factory = factory;
 	myDisplay = new MyDisplay(factory);
 	myDisplay.info(Messages.INSERT_COINS);
 	myCashBox = new GerenteDeDinheiro(factory);
+	coffee = new CafePreto(factory);
+	myCashBox.setCoffeePrice(35);
 	}
 	public void insertCoin(Coin coin) {
 	myCashBox.insertCoin(coin);
@@ -64,31 +67,38 @@ public class MyCoffeeMachine implements CoffeeMachine{
 	myDisplay.info(Messages.INSERT_COINS);
 	}
 	public void select(Drink drink) {
-	boolean validar = true;
+	if(drink == drink.BOUILLON){
+	myCashBox.setCoffeePrice(25);
+	}
+	boolean isvalido = true;
 	if (myCashBox.calculaTroco() < 0) {
-	abortSession(Messages.NO_ENOUGHT_MONEY);// inOrder.verify(display).warn(Messages.NO_ENOUGHT_MONEY);
+	abortSession(Messages.NO_ENOUGHT_MONEY);
 	return;
 	}
-	// Chamada de métodos Plan (InOrder inOrder)
+	
 	switch (drink) {
-	case BLACK:
-	coffee = new CafePreto(factory);
-	validar = coffee.blackPlan();
+	case BLACK:	
+	isvalido = coffee.blackPlan();
 	break;
 	case WHITE:
 	coffee = new CafeWhite(factory);
-	validar = ((CafeWhite) coffee).whitePlan();
+	isvalido = ((CafeWhite) coffee).whitePlan();
 	break;
 	case WHITE_SUGAR:
 	coffee = new CafeWhiteSugar(factory);
-	validar = ((CafeWhiteSugar) coffee).whiteSugarPlan();
+	isvalido = ((CafeWhiteSugar) coffee).whiteSugarPlan();
 	break;
 	case BLACK_SUGAR:
 	coffee = new CafePretoSugar(factory);
-	validar = ((CafePretoSugar) coffee).blackSugarPlan();
+	isvalido = ((CafePretoSugar) coffee).blackSugarPlan();
+	break;
+	case BOUILLON:
+	coffee = new Bouillon(factory);
+	//myCashBox.setCoffeePrice(25);
+	isvalido = ((Bouillon) coffee).bouillonPlan();
 	break;
 	}
-	if (!validar) {
+	if (!isvalido) {
 	abortSession(GerenteDeMenssagens.getWarnMessage());
 	return;
 	}
@@ -100,7 +110,7 @@ public class MyCoffeeMachine implements CoffeeMachine{
 	return;
 	}
 	myDisplay.info(Messages.MIXING);
-	// Chamada de métodos Mix (InOrder inOrder)
+	
 	switch (drink) {
 	case BLACK:
 	coffee.blackMix();
@@ -114,13 +124,16 @@ public class MyCoffeeMachine implements CoffeeMachine{
 	case BLACK_SUGAR:
 	((CafePretoSugar) coffee).blackSugarMix();
 	break;
+	case BOUILLON:
+	((Bouillon) coffee).bouillonMix();
+	break;
 	}
-	// Chamadas de DrinkRelease(InOrder inOrder)
+	
 	myDisplay.info(Messages.RELEASING);
 	coffee.drinkRelease();
 	myDisplay.info(Messages.TAKE_DRINK);
-	releaseCoins(changePlan); // entrega troco
-	newSession(); // nova sessão
+	releaseCoins(changePlan); 
+	newSession(); 
 	}
 	private void abortSession(String msg) {
 	myDisplay.warn(msg);
