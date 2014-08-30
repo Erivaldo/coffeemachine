@@ -6,55 +6,37 @@ import br.ufpb.dce.aps.coffeemachine.Display;
 import br.ufpb.dce.aps.coffeemachine.DrinkDispenser;
 import br.ufpb.dce.aps.coffeemachine.Messages;
 
-public class CafePreto implements Bebidas{
-	protected ComponentsFactory fac;
-	protected Dispenser cupDispenser;
-	protected Dispenser waterDispenser;
-	protected Dispenser coffeePowderDispenser;
-	protected DrinkDispenser drinkDispenser;
-	protected Display display;
-	
-	public void instanciarDispenser(){
-	cupDispenser = fac.getCupDispenser();
-	waterDispenser = fac.getWaterDispenser();
-	coffeePowderDispenser = fac.getCoffeePowderDispenser();
-	drinkDispenser = fac.getDrinkDispenser();
-	display = fac.getDisplay();
+public class CafePreto {
+
+	private ComponentsFactory factory;
+	public CafePreto(ComponentsFactory factory){
+	this.factory = factory;
 	}
-	
-	public void prepararCafe(MyCoffeeMachine meucafe, ComponentsFactory fac) {
-		
-		if (meucafe.calculaTroco() < 0) {
-			fac.getDisplay().warn(Messages.NO_ENOUGHT_MONEY);
-			meucafe.removerCoin(fac);
-			fac.getDisplay().info(Messages.INSERT_COINS);
-			return;
-			}
-			if (!fac.getCupDispenser().contains(1)) {
-			fac.getDisplay().warn(Messages.OUT_OF_CUP);
-			meucafe.removerCoin(fac);
-			fac.getDisplay().info(Messages.INSERT_COINS);
-			return;
-			}
-			if (!fac.getWaterDispenser().contains(1.2)) {
-			fac.getDisplay().warn(Messages.OUT_OF_WATER);
-			meucafe.removerCoin(fac);
-			fac.getDisplay().info(Messages.INSERT_COINS);
-			return;
-			}
-			if (!fac.getCoffeePowderDispenser().contains(1.2)) {
-			fac.getDisplay().warn(Messages.OUT_OF_COFFEE_POWDER);
-			meucafe.removerCoin(fac);
-			fac.getDisplay().info(Messages.INSERT_COINS);
-			return;
-			}
-			fac.getDisplay().info(Messages.MIXING);
-			fac.getCoffeePowderDispenser().release(1.5);
-			fac.getWaterDispenser().release(2.5);
-			fac.getDisplay().info(Messages.RELEASING);
-			fac.getCupDispenser().release(1);
-			fac.getDrinkDispenser().release(1);
-			fac.getDisplay().info(Messages.TAKE_DRINK);
-			fac.getDisplay().info(Messages.INSERT_COINS);
-			}
+	public boolean blackPlan(){
+	if (!factory.getCupDispenser().contains(1)) {
+		GerenteDeMenssagens.setWarnMessage(Messages.OUT_OF_CUP);
+	return false;
+	}
+	if (!factory.getWaterDispenser().contains(0.5)) {
+		GerenteDeMenssagens.setWarnMessage(Messages.OUT_OF_WATER);
+	return false;
+	}
+	if (!factory.getCoffeePowderDispenser().contains(0.8)) {
+		GerenteDeMenssagens.setWarnMessage(Messages.OUT_OF_COFFEE_POWDER);
+	return false;
+	}
+	return true;
+	}
+	public void blackMix(){
+	factory.getCoffeePowderDispenser().release(0.6);
+	factory.getWaterDispenser().release(0.9);
+	}
+	public ComponentsFactory getFactory(){
+	return factory;
+	}
+	public void drinkRelease(){
+	factory.getCupDispenser().release(1);
+	factory.getDrinkDispenser().release(0.3);
+	}
+
 }

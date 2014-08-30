@@ -6,50 +6,24 @@ import br.ufpb.dce.aps.coffeemachine.Display;
 import br.ufpb.dce.aps.coffeemachine.DrinkDispenser;
 import br.ufpb.dce.aps.coffeemachine.Messages;
 
-public class CafeWhite implements Bebidas{
-	protected ComponentsFactory fac;
-	protected Dispenser cupDispenser;
-	protected Dispenser waterDispenser;
-	protected Dispenser coffeePowderDispenser;
-	protected DrinkDispenser drinkDispenser;
-	protected Display display;
+public class CafeWhite extends CafePreto{
 	
-	
-	public void instanciarDispenser(){
-	cupDispenser = fac.getCupDispenser();
-	waterDispenser = fac.getWaterDispenser();
-	coffeePowderDispenser = fac.getCoffeePowderDispenser();
-	drinkDispenser = fac.getDrinkDispenser();
-	display = fac.getDisplay();
-	}
+	public CafeWhite(ComponentsFactory factory) {
+		super(factory);
+		}
+		public boolean whitePlan(){
+		if (!blackPlan()) { //verifyBlackPlan(getCupDispenser(), getWaterDispenser(), getCoffeePowderDispenser()
+		return false;
+		}
+		if(!getFactory().getCreamerDispenser().contains(2.0)){//inOrder.verify(creamerDispenser).contains(anyDouble());
+		GerenteDeMenssagens.setWarnMessage(Messages.OUT_OF_CREAMER);
+		return false;
+		}
+		return true;
+		}
+		public void whiteMix(){
+		blackMix();//blackMix(coffeePowderDispenser.release,waterDispenser).release )
+		getFactory().getCreamerDispenser().release(2.0); //inOrder.verify(creamerDispenser).release
+		}
 
-	public void prepararCafe(MyCoffeeMachine meucafe, ComponentsFactory fac) {
-		
-		
-		if (meucafe.calculaTroco() < 0) {
-			fac.getDisplay().warn(Messages.NO_ENOUGHT_MONEY);
-			meucafe.removerCoin(fac);
-			return;
-			}
-			fac.getCupDispenser().contains(1);
-			fac.getWaterDispenser().contains(1);
-			fac.getCoffeePowderDispenser().contains(1);
-			fac.getCreamerDispenser().contains(1.2);
-			if (!meucafe.planejamento(meucafe.calculaTroco())){
-			fac.getDisplay().warn(Messages.NO_ENOUGHT_CHANGE);
-			meucafe.removerCoin(fac);
-			fac.getDisplay().info(Messages.INSERT_COINS);
-			return;
-			}
-			fac.getDisplay().info(Messages.MIXING);
-			fac.getCoffeePowderDispenser().release(1.9);
-			fac.getWaterDispenser().release(1.10);
-			fac.getCreamerDispenser().release(1.8);
-			fac.getDisplay().info(Messages.RELEASING);
-			fac.getCupDispenser().release(1);
-			fac.getDrinkDispenser().release(0.9);
-			fac.getDisplay().info(Messages.TAKE_DRINK);
-			meucafe.retornaTroco(meucafe.calculaTroco());
-			fac.getDisplay().info(Messages.INSERT_COINS);
-			}
 }

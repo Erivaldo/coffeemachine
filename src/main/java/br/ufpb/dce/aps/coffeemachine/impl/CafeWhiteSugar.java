@@ -6,45 +6,19 @@ import br.ufpb.dce.aps.coffeemachine.Display;
 import br.ufpb.dce.aps.coffeemachine.DrinkDispenser;
 import br.ufpb.dce.aps.coffeemachine.Messages;
 
-public class CafeWhiteSugar implements Bebidas{
-	 protected ComponentsFactory fac;
-		protected Dispenser cupDispenser;
-		protected Dispenser waterDispenser;
-		protected Dispenser coffeePowderDispenser;
-		protected DrinkDispenser drinkDispenser;
-		protected Display display;
-		
-		public void instanciarDispenser(){
-		cupDispenser = fac.getCupDispenser();
-		waterDispenser = fac.getWaterDispenser();
-		coffeePowderDispenser = fac.getCoffeePowderDispenser();
-		drinkDispenser = fac.getDrinkDispenser();
-		display = fac.getDisplay();
-		}
-
-
-	public void prepararCafe(MyCoffeeMachine meucafe, ComponentsFactory fac) {
-		if (meucafe.calculaTroco() < 0) {
-			fac.getDisplay().warn(Messages.NO_ENOUGHT_MONEY);
-			meucafe.removerCoin(fac);
-			return;
-			}
-			fac.getCupDispenser().contains(1);
-			fac.getWaterDispenser().contains(1);
-			fac.getCoffeePowderDispenser().contains(1);
-			fac.getCreamerDispenser().contains(1.5);
-			fac.getSugarDispenser().contains(1.5);
-			meucafe.planejamento(meucafe.calculaTroco());
-			fac.getDisplay().info(Messages.MIXING);
-			fac.getCoffeePowderDispenser().release(1.9);
-			fac.getWaterDispenser().release(1.10);
-			fac.getCreamerDispenser().release(1.8);
-			fac.getSugarDispenser().release(5.0);
-			fac.getDisplay().info(Messages.RELEASING);
-			fac.getCupDispenser().release(1);
-			fac.getDrinkDispenser().release(0.9);
-			fac.getDisplay().info(Messages.TAKE_DRINK);
-			meucafe.retornaTroco(meucafe.calculaTroco());
-			fac.getDisplay().info(Messages.INSERT_COINS);
-	}
+public class CafeWhiteSugar extends CafeWhite {
+	 public CafeWhiteSugar(ComponentsFactory factory) {
+		 super(factory);
+		 }
+		 public boolean whiteSugarPlan(){
+		 if(!whitePlan()){ // inOrder.verify(creamerDispenser).contains(anyDouble());
+		 return false;
+		 }
+		 getFactory().getSugarDispenser().contains(5.0); // inOrder.verify(getSugarDispenser).contains(anyDouble());
+		 return true;
+		 }
+		 public void whiteSugarMix(){
+		 whiteMix();
+		 getFactory().getSugarDispenser().release(5.0); //inOrder.verify(sugarDispenser).release
+		 }
 }
