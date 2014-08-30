@@ -13,306 +13,107 @@ import br.ufpb.dce.aps.coffeemachine.Messages;
 
 public class MyCoffeeMachine implements CoffeeMachine{
 
-	private ComponentsFactory Factory;
-	private int inteiro;
-	private int centavos;
-	private CashBox cb;
-	private List<Coin> lista, coins;
-	private Drink bebida;
-	private final int cafe = 35;
 
+	private ComponentsFactory fac;
+	private int total, cafe,centavos;
+	private ArrayList<Coin> coins;
+	private ArrayList<Coin> lista;
+	private ArrayList<Coin> Troco;
+	
+	
+	
 	public MyCoffeeMachine(ComponentsFactory factory) {
-		this.centavos = 0;
-		this.inteiro = 0;
-		this.Factory = factory;
-		this.Factory.getDisplay().info("Insert coins and select a drink!");
-		this.cb = Factory.getCashBox();
-		this.lista = new ArrayList<Coin>();
-		this.coins = new ArrayList<Coin>();
+		fac = factory;
+		fac.getDisplay().info("Insert coins and select a drink!");
+		coins = new ArrayList<Coin>();
+		lista = new ArrayList<Coin>();
+		Troco = new ArrayList<Coin>();
+		cafe = 35;
 	}
-
+	
 	public void insertCoin(Coin coin) {
-
 		if (coin == null) {
-			throw new CoffeeMachineException("Moeda inválida.");
+		throw new CoffeeMachineException("Moeda não aceita");
 		}
-		inteiro += coin.getValue() / 100;
-		centavos += coin.getValue() % 100;
-		this.Factory.getDisplay().info(
-				"Total: US$" + " " + inteiro + "." + centavos);
-		this.lista.add(coin);
-	}
-	
-	public void cancel() {
-		if (this.inteiro == 0 && this.centavos == 0) {
-			throw new CoffeeMachineException("Ausencia de moedas.");
+		this.coins.add(coin);
+		centavos += coin.getValue();
+		fac.getDisplay()
+		.info("Total: US$ " + centavos / 100 + "." + centavos
+		% 100);
 		}
-
-		this.Factory.getDisplay().warn(Messages.CANCEL);
-
-		retirarmoedas(Factory);
-
-		this.Factory.getDisplay().info(Messages.INSERT_COINS);
-
-		this.lista.clear(); 
-	}
-
-	private void retirarmoedas(ComponentsFactory factory) {
-		List<Integer> remover = new ArrayList<Integer>();
-
-		for (Coin coin : Coin.reverse()) {
-			for (int i = 0; i < this.lista.size(); i++) {
-				if (this.lista.get(i).equals(coin)) {
-					this.Factory.getCashBox().release(lista.get(i));
-					remover.add(new Integer(i));
-				}
-			}
+		public void retornaTroco(int change) {
+		for (Coin moeda : this.Troco) {
+		fac.getCashBox().release(moeda);
 		}
-		this.lista.removeAll(remover);
-
-	}
-
-
-	public List<Coin> retornarTroco(int troco) {
-		for (Coin coin : Coin.reverse()) {
-			while (coin.getValue() <= troco) {
-				Factory.getCashBox().release(coin);
-				this.coins.add(coin);
-				troco -= coin.getValue();
-			}
 		}
-		return coins;
-	}
-	
-
-	public boolean planejamento(int troco) {
-		for (Coin coin : Coin.reverse()) {
-			if (coin.getValue() <= troco && this.Factory.getCashBox().count(coin) > 0) {
-				troco -= coin.getValue();
-			}
-
+		public boolean planejamento(int troco) {
+		for (Coin moeda : Coin.reverse()) {
+		if (moeda.getValue() <= troco) {
+		int count = fac.getCashBox().count(moeda);
+		while (moeda.getValue() <= troco && count > 0) {
+		troco -= moeda.getValue();
+		this.Troco.add(moeda);
+		}
+		}
 		}
 		return troco == 0;
-		
-	}
-		
-	
-
-	public int calculaTroco() {
+		}
+		public int calculaTroco() {
 		int contador = 0;
-		for (Coin c : this.lista) {
-			contador += c.getValue();
+		for (Coin aux : this.coins) {
+		contador += aux.getValue();
 		}
 		return contador - this.cafe;
-
-	}
-	public int [] semTrocoTrivial (int dinheiro) {
-			int [] changePlan = new int[6];
-				int i=0;
-				for (Coin r : Coin.reverse()) {
-					if (r.getValue() <= dinheiro && cb.count(r) > 0) {
-						while (r .getValue() <= dinheiro) {
-							dinheiro -= r.getValue();
-							changePlan[i]++;
-						}
-					}
-				}		
-				
-				return changePlan;
-			}
-	
+		}
+		public void removerCoin(ComponentsFactory fac) {
+		List<Integer> remover = new ArrayList<Integer>();
+		for (Coin coin : Coin.reverse()) {
+		for (int i = 0; i < this.coins.size(); i++) {
+		if (this.coins.get(i).equals(coin)) {
+		fac.getCashBox().release(coins.get(i));
+		remover.add(new Integer(i));
+		}
+		}
+		}
+		this.coins.removeAll(remover);
+		}
+		public void cancel() {
+		if (this.centavos == 0) {
+		throw new CoffeeMachineException("Não possui moedas inseridas");
+		}
+		fac.getDisplay().warn(Messages.CANCEL);
+		removerCoin(fac);
+		fac.getDisplay().info(Messages.INSERT_COINS);
+		}
 	public void select(Drink drink) {
-
-		if(Drink.BLACK == drink){
-			
-			if (semTrocoTrivial(calcularTroco())) {
-				retornarTroco(calcularTroco());
-								return;}				}
-			
-			if (calculaTroco() < 0) {
-				Factory.getDisplay().warn(Messages.NO_ENOUGHT_MONEY);
-				this.retirarmoedas(Factory);
-				this.Factory.getDisplay().info(Messages.INSERT_COINS);
-				return;
-			}	
-			if (!Factory.getCupDispenser().contains(1)) {
-				Factory.getDisplay().warn(Messages.OUT_OF_CUP);
-				retirarmoedas(Factory);
-				this.Factory.getDisplay().info(Messages.INSERT_COINS);
-				return;
-
-			}
-			if (!Factory.getWaterDispenser().contains(1)) {
-				Factory.getDisplay().warn(Messages.OUT_OF_WATER);
-				retirarmoedas(Factory);
-				this.Factory.getDisplay().info(Messages.INSERT_COINS);
-				return;
-
-			}
-			if (!Factory.getCoffeePowderDispenser().contains(0.1)) {
-
-				Factory.getDisplay().warn(Messages.OUT_OF_COFFEE_POWDER);
-				retirarmoedas(Factory);
-				this.Factory.getDisplay().info(Messages.INSERT_COINS);
-				return;
-			}
-			if (!planejamento(calculaTroco())){
-				Factory.getDisplay().warn(Messages.NO_ENOUGHT_CHANGE);
-				this.retirarmoedas(Factory);
-				this.Factory.getDisplay().info(Messages.INSERT_COINS);
-				return;
-			}
-
-			
-			Factory.getDisplay().info(Messages.MIXING);
-			Factory.getCoffeePowderDispenser().release(1.2);
-			Factory.getWaterDispenser().release(1.0);
-			
-
-			Factory.getDisplay().info(Messages.RELEASING);
-			Factory.getCupDispenser().release(1);
-			Factory.getDrinkDispenser().release(1.4);
-			Factory.getDisplay().info(Messages.TAKE_DRINK);
-			
-			retornarTroco(calculaTroco());
-
-			Factory.getDisplay().info(Messages.INSERT_COINS);
-
-		}
-
-		else if(Drink.BLACK_SUGAR == drink){
-			if (calculaTroco() < 0) {
-				Factory.getDisplay().warn(Messages.NO_ENOUGHT_MONEY);
-				this.retirarmoedas(Factory);
-				return;
-			}
-			if (!Factory.getCupDispenser().contains(1)) {
-				Factory.getDisplay().warn(Messages.OUT_OF_CUP);
-				retirarmoedas(Factory);
-				this.Factory.getDisplay().info(Messages.INSERT_COINS);
-				return;
-			}
-			if (!Factory.getWaterDispenser().contains(1)) {
-				Factory.getDisplay().warn(Messages.OUT_OF_WATER);
-				retirarmoedas(Factory);
-				this.Factory.getDisplay().info(Messages.INSERT_COINS);
-				return;
-
-			}
-			if (!Factory.getCoffeePowderDispenser().contains(1)) {
-				Factory.getDisplay().warn(Messages.OUT_OF_COFFEE_POWDER);
-				retirarmoedas(Factory);
-				this.Factory.getDisplay().info(Messages.INSERT_COINS);
-				return;
-			}
-			if (!Factory.getSugarDispenser().contains(1)) {
-				Factory.getDisplay().warn(Messages.OUT_OF_SUGAR);
-				retirarmoedas(Factory);
-				this.Factory.getDisplay().info(Messages.INSERT_COINS);
-				return;
-
-			}
-			if (!planejamento(calculaTroco())){
-				Factory.getDisplay().warn(Messages.NO_ENOUGHT_CHANGE);
-				this.retirarmoedas(Factory);
-				this.Factory.getDisplay().info(Messages.INSERT_COINS);
-				return;
-			}
-
-			Factory.getDisplay().info(Messages.MIXING);
-			Factory.getCoffeePowderDispenser().release(1.9);
-			Factory.getWaterDispenser().release(1.10);
-			Factory.getSugarDispenser().release(1.11);
-			
-
-			Factory.getDisplay().info(Messages.RELEASING);
-			Factory.getCupDispenser().release(1);
-			Factory.getDrinkDispenser().release(0.9);
-			Factory.getDisplay().info(Messages.TAKE_DRINK);
-
-			retornarTroco(calculaTroco());
-			
-			Factory.getDisplay().info(Messages.INSERT_COINS);
-
-			this.lista.clear();
-		}
-
-		else if(Drink.WHITE == drink){
-			if (calculaTroco() < 0) {
-				Factory.getDisplay().warn(Messages.NO_ENOUGHT_MONEY);
-				this.retirarmoedas(Factory);
-				return;
-				}
-
-
-			Factory.getCupDispenser().contains(1);
-			Factory.getWaterDispenser().contains(1);
-			Factory.getCoffeePowderDispenser().contains(1);
-			Factory.getCreamerDispenser().contains(1.2);
-			
-			if (!planejamento(calculaTroco())){
-				Factory.getDisplay().warn(Messages.NO_ENOUGHT_CHANGE);
-				this.retirarmoedas(Factory);
-				this.Factory.getDisplay().info(Messages.INSERT_COINS);
-				return;
-			}
-			
-			Factory.getDisplay().info(Messages.MIXING);
-			Factory.getCoffeePowderDispenser().release(1.9);
-			Factory.getWaterDispenser().release(1.10);
-			Factory.getCreamerDispenser().release(1.8);
-
-			Factory.getDisplay().info(Messages.RELEASING);
-			Factory.getCupDispenser().release(1);
-			Factory.getDrinkDispenser().release(0.9);
-			Factory.getDisplay().info(Messages.TAKE_DRINK);
-			
-			retornarTroco(calculaTroco());
-			
-			Factory.getDisplay().info(Messages.INSERT_COINS);
-
-		}
-
-		else if (Drink.WHITE_SUGAR == drink) {
-			
-			if (calculaTroco() < 0) {
-				Factory.getDisplay().warn(Messages.NO_ENOUGHT_CHANGE);
-				this.retirarmoedas(Factory);
-				return;
-			}
-			
-			Factory.getCupDispenser().contains(1);
-			Factory.getWaterDispenser().contains(1);
-			Factory.getCoffeePowderDispenser().contains(1);
-			Factory.getCreamerDispenser().contains(1.2);
-			Factory.getSugarDispenser().contains(1.1);
-			
+		Bebidas bebida = null;
 		
-			if (!planejamento(calculaTroco())){
-				Factory.getDisplay().warn(Messages.NO_ENOUGHT_MONEY);
-				this.retirarmoedas(Factory);
-				this.Factory.getDisplay().info(Messages.INSERT_COINS);
-				return;
-			}
-
-			Factory.getDisplay().info(Messages.MIXING);
-			Factory.getCoffeePowderDispenser().release(1.9);
-			Factory.getWaterDispenser().release(1.10);
-			Factory.getCreamerDispenser().release(1.8);
-			Factory.getSugarDispenser().release(1.0);
-
-			Factory.getDisplay().info(Messages.RELEASING);
-			Factory.getCupDispenser().release(1);
-			Factory.getDrinkDispenser().release(0.9);
-			Factory.getDisplay().info(Messages.TAKE_DRINK);
-
-			retornarTroco(calculaTroco());
-			
-			Factory.getDisplay().info(Messages.INSERT_COINS);
-
 	
+		
+		
+		switch (drink) {
+		case BLACK:
+			bebida =new CafePreto();
+			bebida.prepararCafe(this,fac);
+			
+			break;
+		case BLACK_SUGAR:
+			bebida = new CafePretoSugar();
+			bebida.prepararCafe(this,fac);
+			this.coins.clear();
+			break;
+		case WHITE:
+			bebida = new CafeWhite();
+			bebida.prepararCafe(this,fac);
+			break;
+		case WHITE_SUGAR:
+			bebida = new CafeWhiteSugar();
+			bebida.prepararCafe(this,fac);
+			break;
+		default:
+			break;
 		}
-
+	
 			
 		
 		
