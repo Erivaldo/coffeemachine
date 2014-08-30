@@ -10,11 +10,11 @@ public class CafePretoSugar extends CafePreto {
 	public CafePretoSugar(ComponentsFactory factory){
 		super(factory);
 		}
-		public boolean blackSugarPlan(){
+	public boolean blackSugarPlan(){
 		if (!blackPlan()) { //verifyBlackPlan(getCupDispenser(), getWaterDispenser(), getCoffeePowderDispenser()
 		return false;
 		}
-		if (!getFactory().getSugarDispenser().contains(5.0)) { // inOrder.verify(getSugarDispenser).contains(anyDouble());
+		if (!getFactory().getSugarDispenser().contains(5)) { // inOrder.verify(getSugarDispenser).contains(anyDouble());
 			GerenteDeMenssagens.setWarnMessage(Messages.OUT_OF_SUGAR);
 		return false;
 		}
@@ -22,7 +22,7 @@ public class CafePretoSugar extends CafePreto {
 		}
 		public void blackSugarMix(){
 		blackMix(); //blackMix(coffeePowderDispenser.release,waterDispenser).release )
-		getFactory().getSugarDispenser().release(5.0); //inOrder.verify(sugarDispenser).release
+		getFactory().getSugarDispenser().release(5); //inOrder.verify(sugarDispenser).release
 		}
 
 }
