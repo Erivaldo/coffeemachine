@@ -7,11 +7,14 @@ public class Bouillon extends CafePreto{
 	public Bouillon(ComponentsFactory factory){
 		super(factory);
 		}
-		public boolean bouillonPlan(){
-		if (!blackPlan()) { 
+	public boolean bouillonPlan(){
+		if (!blackPlan()) { //verifyBlackPlan(getCupDispenser(), getWaterDispenser(), getCoffeePowderDispenser()
 		return false;
 		}	
-		getFactory().getBouillonDispenser().contains(10);	
+		if (!getFactory().getBouillonDispenser().contains(10)) {
+			GerenteDeMenssagens.setWarnMessage(Messages.OUT_OF_BOUILLON_POWDER);
+		return false;
+		}
 		return true;
 		}	
 		public void bouillonMix(){
